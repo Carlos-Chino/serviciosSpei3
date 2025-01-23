@@ -1,0 +1,52 @@
+package org.serviciosSpei3.registroDeOrdenes;
+import lombok.Getter;
+import lombok.Setter;
+import java.math.BigDecimal;
+@Getter
+@Setter
+public class DatosOrdenes {
+    private String instancia;
+    private String fechaOperacion;
+    private Integer institucionOrdenante;
+    private String claveRastreo;
+    private Integer institucionBeneficiaria;
+    private BigDecimal monto;
+    private Integer tipoPago;
+    private String nombreOrdenante;
+    private Integer tipoCuentaOrdenante;
+    private String cuentaOrdenante;
+    private String rfcCurpOrdenante;
+    private String nombreBeneficiario;
+    private Integer tipoCuentaBeneficiario;
+    private String cuentaBeneficiario;
+    private String rfcCurpBeneficiario;
+    private String nombreBeneficiario2;
+    private Integer tipoCuentaBeneficiario2;
+    private String cuentaBeneficiario2;
+    private String rfcCurpBeneficiario2;
+    private String conceptoPago;
+    private String conceptoPago2;
+    private Integer referenciaNumerica;
+    private String clavePago;
+    private Integer referenciaCobranza;
+    private BigDecimal iva;
+    private Integer tipoOperacion;
+    private String claveRastreoDet;
+    private String infoFacturas;
+    private Integer folioOrden;
+    private String numCelularOrdenante;
+    private String numCelularBeneficiario;
+    private Integer digitoIdOrdenante;
+    private Integer digitoIdBeneficiario;
+    private String folioPlataforma;
+    private String fechaLimitePago;
+    private Integer pagoComision;
+    private BigDecimal montoComision;
+    private String aliasCelCertOrd;
+    private String aliasCelCertBene;
+    private String aliasCertComercio;
+    private Integer digitoCertComercio;
+    private String uetrSwift;
+    private String campoSwift1;
+    private String campoSwift2;
+}
