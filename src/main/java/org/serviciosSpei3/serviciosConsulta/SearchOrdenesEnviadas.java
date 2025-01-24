@@ -1,19 +1,19 @@
 package org.serviciosSpei3.serviciosConsulta;
-
-import org.serviciosSpei3.controles.DateUtil;
 import java.io.*;
 import java.util.Map;
 import java.util.StringJoiner;
+import static org.serviciosSpei3.controles.DateUtil.getTimeRangeForOperacion;
 
 public class SearchOrdenesEnviadas extends BaseServicioConsulta {
     private final String servicio="/api/v1/ordenes/envios/search";
     @Override
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {
+
         String fechaOperacion = parametros.get("fechaOperacion");
         if (fechaOperacion == null) {
             throw new IllegalArgumentException("El parámetro 'fechaOperacion' es obligatorio.");
         }
-        String[] timeRange = DateUtil.getTimeRangeForOperacion(fechaOperacion);
+        String[] timeRange = getTimeRangeForOperacion(fechaOperacion);
         String timeStart = timeRange[0];
         String timeEnd = timeRange[1];
         StringJoiner url = new StringJoiner("&", getUrlServicioBase()+servicio + "?", "");

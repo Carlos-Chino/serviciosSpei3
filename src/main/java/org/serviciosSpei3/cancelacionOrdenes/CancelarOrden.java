@@ -24,7 +24,7 @@ public class CancelarOrden {
             String urlServicio = construirUrl(cancelarOrden.getOrdenId(), razonRechazo);
             String firma = generarFirma(cancelarOrden);
             String respuesta = sendRequest(urlServicio, "PUT", getHeaders(firma), null);
-            procesarRespuesta(respuesta);
+            new GuardarRegistroOrden(respuesta, "ordenIdCancelada.txt");
         }
     }
 
@@ -55,9 +55,6 @@ public class CancelarOrden {
         return cancelarOrdenes;
     }
 
-    protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOrden(respuesta, "ordenIdCancelada.txt");
-    }
 
     protected Map<String, String> getHeaders(String firma) throws IOException {
         return Map.of(

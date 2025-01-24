@@ -30,7 +30,7 @@ public abstract class ServicioBaseConfirmacionOrden {
             String peticion = generarPeticion(confirmaOrden);
             String firma = generarFirma(confirmaOrden);
             String respuesta = sendRequest(urlServicio, "POST", getHeaders(firma), peticion);
-            procesarRespuesta(respuesta);
+            new GuardarRegistroOrden(respuesta, "claveRastreoOrdenConfirmada.txt");
         }
     }
 
@@ -58,10 +58,6 @@ public abstract class ServicioBaseConfirmacionOrden {
             }
         }
         return confirmaOrdenes;
-    }
-
-    protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOrden(respuesta, "claveRastreoOrdenConfirmada.txt");
     }
 
     protected Map<String, String> getHeaders(String firma) throws IOException {

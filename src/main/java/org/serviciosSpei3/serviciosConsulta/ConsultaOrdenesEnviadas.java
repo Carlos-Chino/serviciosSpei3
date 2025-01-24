@@ -1,12 +1,14 @@
 package org.serviciosSpei3.serviciosConsulta;
 
 
+import java.io.IOException;
+
 public class ConsultaOrdenesEnviadas extends BaseServicioConsulta {
-    private static final String urlServicio = "https://spei-core-stp-core-pruebas-apps-spei-asa.stp-ti.com/api/v1/ordenes/envios/consulta?id=";
+    private static final String servicio = "/api/v1/ordenes/envios/consulta?id=";
 
     @Override
-    public String buildUrl(String claveRastreo) {
-        return urlServicio + claveRastreo;
+    public String buildUrl(String claveRastreo) throws IOException {
+        return getUrlServicioBase()+servicio + claveRastreo;
     }
 
     @Override
