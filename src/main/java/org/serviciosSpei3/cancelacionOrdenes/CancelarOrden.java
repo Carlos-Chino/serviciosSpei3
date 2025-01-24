@@ -1,38 +1,23 @@
 package org.serviciosSpei3.cancelacionOrdenes;
-
-
 import org.serviciosSpei3.controles.CryptoHandler;
-import org.serviciosSpei3.registroDeOrdenes.GuardarRegistroOrden;
+import org.serviciosSpei3.controles.ServicioBase;
+import org.serviciosSpei3.registroDeOrdenes.GuardarRegistroOperacion;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import static org.serviciosSpei3.controles.HttpClient.sendRequest;
-import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
 
-public class CancelarOrden {
-    private static final String certificado = "1733350443035";
-    private static final String servicioBase = "src/main/resources/propiedades.properties";
+public class CancelarOrden extends ServicioBase<datosCancelarOrden> {
 
-    public void ejecutarServicio(String razonRechazo, String archivo) throws Exception {
-        List<datosCancelarOrden> cancelarOrdenes = cargarDatosCancelarOrden(archivo);
-        for (datosCancelarOrden cancelarOrden : cancelarOrdenes) {
-            String urlServicio = construirUrl(cancelarOrden.getOrdenId(), razonRechazo);
-            String firma = generarFirma(cancelarOrden);
-            String respuesta = sendRequest(urlServicio, "PUT", getHeaders(firma), null);
-            new GuardarRegistroOrden(respuesta, "ordenIdCancelada.txt");
-        }
+    @Override
+    protected String construirUrl(datosCancelarOrden datos) throws IOException {
+        String razonRechazo = "cancelacion";
+        return getUrlServicioBase() + "/api/v1/ordenes/envios/cancela?id=" + datos.getOrdenId() + "&razonRechazo=" + razonRechazo;
     }
 
-    private String construirUrl(String ordenId,String razonRechazo) throws IOException {
-        return getUrlServicioBase() + "/api/v1/ordenes/envios/cancela?id=" + ordenId+"&razonRechazo="+razonRechazo;
-    }
-
-    protected List<datosCancelarOrden> cargarDatosCancelarOrden(String archivo) throws IOException {
+    @Override
+    protected List<datosCancelarOrden> cargarDatos(String archivo) throws IOException {
         List<datosCancelarOrden> cancelarOrdenes = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -55,24 +40,18 @@ public class CancelarOrden {
         return cancelarOrdenes;
     }
 
-
-    protected Map<String, String> getHeaders(String firma) throws IOException {
-        return Map.of(
-                "Content-Type", "application/json",
-                "Authorization", "Bearer " + loadAccessToken(),
-                "X-EF-Firma", firma.trim(),
-                "X-EF-Certificado", certificado
-        );
+    @Override
+    protected void procesarRespuesta(String respuesta) {
+        new GuardarRegistroOperacion(respuesta, "ordenIdCancelada.txt","ordenId");
     }
 
-    protected String getUrlServicioBase() throws IOException {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream(servicioBase)) {
-            properties.load(input);
-            return properties.getProperty("urlServicioBase");
-        }
-    }
-    protected String generarFirma(datosCancelarOrden cancelarOrden) {
-        return new CryptoHandler().cancelarOrden(cancelarOrden);
-    }
+    @Override
+    protected String generarPeticion(datosCancelarOrden datos) {return null;}
+
+    @Override
+    protected String generarFirma(datosCancelarOrden datos) {
+        return new CryptoHandler().cancelarOrden(datos);}
+
+    @Override
+    protected String getMetodoHttp() {return "PUT";}
 }

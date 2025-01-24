@@ -3,15 +3,16 @@ import org.serviciosSpei3.controles.CryptoHandler;
 import java.io.IOException;
 
 public class OrdenParticipanteAParticipanteT7 extends ServicioBaseGenerarOrden {
-    @Override
-    protected void inicializarDatos() throws IOException {
+    public OrdenParticipanteAParticipanteT7() throws IOException {
         super.inicializarDatos();
         datosOrdenes.setTipoPago(7);
     }
+
     @Override
-    protected String generarPeticion() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{")
+    protected String generarPeticion(DatosOrdenes datosOrdenes) {
+        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
+        StringBuilder peticion = new StringBuilder();
+        peticion.append("{")
                 .append("\"fechaOperacion\":\"").append(datosOrdenes.getFechaOperacion()).append("\",\n")
                 .append("\"institucionOrdenante\":\"").append(datosOrdenes.getInstitucionOrdenante()).append("\",\n")
                 .append("\"instancia\":\"").append(datosOrdenes.getInstancia()).append("\",\n")
@@ -25,11 +26,10 @@ public class OrdenParticipanteAParticipanteT7 extends ServicioBaseGenerarOrden {
                 //.append("\"iva\":\"").append(datosOrdenes.getIva()).append("\",\n")
                 .append("\"tipoOperacion\":\"").append(datosOrdenes.getTipoOperacion()).append("\"}")
                 .append("}");
-        String peticion = sb.toString();
-        return peticion;
+        return peticion.toString();
     }
     @Override
-    protected String generarFirma() {
+    protected String generarFirma(DatosOrdenes datosOrdenes) {
         return new CryptoHandler().ordenParticipanteAParticipanteT7(datosOrdenes);
     }
 }

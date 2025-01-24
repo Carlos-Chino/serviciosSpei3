@@ -5,12 +5,13 @@ import java.math.BigDecimal;
 
 public class DevolucionAcreditadaExtemporaneaT18 extends ServicioBaseDevolucion{
 
-    public DevolucionAcreditadaExtemporaneaT18(Integer causaDevoluion, String archivo) {
-        super(causaDevoluion, archivo);
+    public DevolucionAcreditadaExtemporaneaT18(Integer causaDevoluion) {
+        super(causaDevoluion);
     }
 
     @Override
     protected String generarPeticion(DatosDevolucion devolucion) {
+        devolucion.setClaveRastreo("PruebasQA" + System.currentTimeMillis());
         devolucion.setMontoIntereses(new BigDecimal("0.01"));
         StringBuilder peticion = new StringBuilder();
         peticion.append("{\n");

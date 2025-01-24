@@ -4,14 +4,14 @@ import java.io.IOException;
 
 public class CobroNoPresencialUnaOcasion20 extends ServicioBaseGenerarOrden {
 
-    @Override
-    protected void inicializarDatos() throws IOException {
+    public CobroNoPresencialUnaOcasion20() throws IOException {
         super.inicializarDatos();
         datosOrdenes.setTipoPago(20);
     }
 
     @Override
-    protected String generarPeticion() {
+    protected String generarPeticion(DatosOrdenes datosOrdenes) {
+        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
         StringBuilder peticion = new StringBuilder();
         peticion.append("{");
         peticion.append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n");
@@ -44,7 +44,7 @@ public class CobroNoPresencialUnaOcasion20 extends ServicioBaseGenerarOrden {
     }
 
     @Override
-    protected String generarFirma() {
+    protected String generarFirma(DatosOrdenes datosOrdenes) {
         return new CryptoHandler().ordenCobroNoPresencialUnaOcasionT20(datosOrdenes);
     }
 }

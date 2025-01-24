@@ -3,6 +3,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.serviciosSpei3.generacionURLCep.UrlCepOrdenesEnviadas;
+import org.serviciosSpei3.generacionURLCep.UrlCepOrdenesRecibidas;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -86,7 +88,9 @@ public abstract class BaseServicioConsulta {
             ((SearchOrdenesRecibidasPendientes) this).guardarOrdenesRecibidasPendientes(respuesta);
         }
         else if (this instanceof UrlCepOrdenesEnviadas) {
-            ((UrlCepOrdenesEnviadas) this).guardarUrlCepOrdenesEnviadas(respuesta);
+            ((UrlCepOrdenesEnviadas) this).procesarRespuesta(respuesta);
+        } else if (this instanceof UrlCepOrdenesRecibidas) {
+            ((UrlCepOrdenesRecibidas) this).procesarRespuesta(respuesta);
         }
     }
 

@@ -7,14 +7,15 @@ import java.math.BigDecimal;
 public class DevolucionEspecialAcreditadaT23 extends ServicioBaseDevolucion{
     private String indicadorBeneficiario;
     private String montoDevolucion;
-    public DevolucionEspecialAcreditadaT23(Integer causaDevoluion, String montoDevolucion,String archivo, String indicadorBeneficiario) {
-        super(causaDevoluion, archivo);
+    public DevolucionEspecialAcreditadaT23(Integer causaDevolucion, String montoDevolucion, String indicadorBeneficiario) {
+        super(causaDevolucion);
         this.indicadorBeneficiario=indicadorBeneficiario;
         this.montoDevolucion=montoDevolucion;
     }
 
     @Override
     protected String generarPeticion(DatosDevolucion devolucion) {
+        devolucion.setClaveRastreo("PruebasQA" + System.currentTimeMillis());
         devolucion.setIndicadorBeneficiario(indicadorBeneficiario);
         devolucion.setMontoDevolucion(new BigDecimal(this.montoDevolucion));
         StringBuilder peticion = new StringBuilder();

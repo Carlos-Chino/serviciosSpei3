@@ -2,10 +2,14 @@ package org.serviciosSpei3.devolucionOrdenes;
 import org.serviciosSpei3.controles.CryptoHandler;
 
 public class DevolucionNoAcreditadaT0 extends  ServicioBaseDevolucion{
-    public DevolucionNoAcreditadaT0(Integer causaDevoluion, String archivo) {super(causaDevoluion, archivo);}
+
+    public DevolucionNoAcreditadaT0(Integer causaDevolucion) {
+        super(causaDevolucion);
+    }
 
     @Override
     protected String generarPeticion(DatosDevolucion devolucion) {
+        devolucion.setClaveRastreo("PruebasQA" + System.currentTimeMillis());
         StringBuilder peticion = new StringBuilder();
         peticion.append("{\n");
         peticion.append("\"claveRastreo\":\"").append(devolucion.getClaveRastreo()).append("\",\n");

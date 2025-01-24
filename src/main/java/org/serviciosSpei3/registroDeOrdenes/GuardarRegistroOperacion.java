@@ -10,17 +10,19 @@ import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GuardarRegistroOrden {
-    private final String respuesta;
-    private final String nombreArchivo;
+public class GuardarRegistroOperacion {
+    private String respuesta;
+    private String nombreArchivo;
+    private String header;
 
-    public GuardarRegistroOrden(String respuesta, String nombreArchivo) {
+    public GuardarRegistroOperacion(String respuesta, String nombreArchivo, String header) {
         this.respuesta = respuesta;
         this.nombreArchivo = nombreArchivo;
+        this.header=header;
         guardarClaveRastreoEnArchivo();
     }
 
-    public String extraerClaveRastreo() {
+    public String extraerRegistroOperacion() {
         try {
             JSONObject jsonResponse = new JSONObject(respuesta);
             if (!jsonResponse.has("info") || jsonResponse.isNull("info")) {
@@ -47,9 +49,9 @@ public class GuardarRegistroOrden {
                 }
             }
             if (archivo.length() == 0) {
-                writer.write("ordenId\n");
+                writer.write(this.header+"\n");
             }
-            String claveRastreo = extraerClaveRastreo();
+            String claveRastreo = extraerRegistroOperacion();
             if (existingLines.add(claveRastreo)) {
                 writer.write(claveRastreo + "\n");
             }

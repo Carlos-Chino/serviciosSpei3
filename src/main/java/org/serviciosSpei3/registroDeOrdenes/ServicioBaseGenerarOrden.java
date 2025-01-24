@@ -1,51 +1,34 @@
 package org.serviciosSpei3.registroDeOrdenes;
 
+import org.serviciosSpei3.controles.ServicioBase;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 
-import static org.serviciosSpei3.controles.HttpClient.sendRequest;
-import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
-
-public abstract class ServicioBaseGenerarOrden {
-    private static final String certificado = "1733350443035";
+public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes> {
     private static final String propiedades = "src/main/resources/propiedades.properties";
     protected String fechaOperacion = fechaOperacion();
     protected DatosOrdenes datosOrdenes;
 
-    public ServicioBaseGenerarOrden() {
+    public ServicioBaseGenerarOrden() throws IOException {
         this.datosOrdenes = new DatosOrdenes();
-    }
-    protected abstract String generarPeticion();
-    protected abstract String generarFirma();
-
-    public void ejecutarServicio() throws Exception {
         inicializarDatos();
-        String peticion = generarPeticion();
-        String firma = generarFirma();
-        String respuesta = sendRequest(construirUrl() , "POST", headers(firma), peticion);
-        procesarRespuesta(respuesta);
     }
 
-    private String fechaOperacion() {
-        LocalTime currentTime = LocalTime.now();
-        LocalDate currentDate = LocalDate.now();
-        if (currentTime.isAfter(LocalTime.of(18, 0))) {
-            currentDate = currentDate.plusDays(1);
-        }
-        return currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
+    protected abstract String generarPeticion(DatosOrdenes datos);
+    protected abstract String generarFirma(DatosOrdenes datos);
 
-    private String construirUrl() throws IOException {
+    @Override
+    protected String construirUrl(DatosOrdenes datos) throws IOException {
         return getUrlServicioBase() + "/api/v1/ordenes/envios";
     }
 
-    protected void inicializarDatos() throws IOException {
+    protected List<DatosOrdenes> inicializarDatos() throws IOException {
         Properties properties = cargarPropiedadesEnvioPagos();
         datosOrdenes.setMonto(new BigDecimal(properties.getProperty("monto")));
         datosOrdenes.setInstancia(properties.getProperty("instancia"));
@@ -81,6 +64,16 @@ public abstract class ServicioBaseGenerarOrden {
         datosOrdenes.setTipoCuentaBeneficiario2(40);
         datosOrdenes.setCuentaBeneficiario2("846180000000000016");
         datosOrdenes.setRfcCurpBeneficiario2("PRUE211130H54");
+        return List.of(datosOrdenes);
+    }
+
+    private String fechaOperacion() {
+        LocalTime currentTime = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
+        if (currentTime.isAfter(LocalTime.of(18, 0))) {
+            currentDate = currentDate.plusDays(1);
+        }
+        return currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public void ejecutarMultiple() throws IOException {
@@ -92,32 +85,21 @@ public abstract class ServicioBaseGenerarOrden {
         }
         for (int i = 0; i < numeroEjecuciones; i++) {
             try {
-                ejecutarServicio();
+                ejecutarServicio(null);
             } catch (Exception e) {
-                System.err.println("Error en la ejecución " + (i + 1) + ": " + e.getMessage());
+                System.out.println("Error en la ejecución " + (i + 1) + ": " + e.getMessage());
             }
         }
     }
 
+    @Override
+    protected List<DatosOrdenes> cargarDatos(String archivo) {
+        return List.of(datosOrdenes);
+    }
+
+    @Override
     protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOrden(respuesta,"OrdenesIdEnviadas.txt");
-    }
-
-    private Map<String, String> headers(String firma) throws IOException {
-        return Map.of(
-                "Content-Type", "application/json",
-                "Authorization", "Bearer " + loadAccessToken(),
-                "X-EF-Firma", firma.trim(),
-                "X-EF-Certificado", certificado
-        );
-    }
-
-    protected String getUrlServicioBase() throws IOException {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream(propiedades)) {
-            properties.load(input);
-            return properties.getProperty("urlServicioBase");
-        }
+        new GuardarRegistroOperacion(respuesta, "OrdenesIdEnviadas.txt","ordenId");
     }
 
     protected Properties cargarPropiedadesEnvioPagos() throws IOException {
@@ -137,4 +119,7 @@ public abstract class ServicioBaseGenerarOrden {
         }
         return value.toString();
     }
+
+    @Override
+    protected String getMetodoHttp() {return "POST";}
 }

@@ -15,20 +15,21 @@ public abstract class ServicioBase<T> {
     protected abstract String generarPeticion(T datos);
     protected abstract String generarFirma(T datos);
     protected abstract void procesarRespuesta(String respuesta);
-    protected abstract List<T> cargarDatos(String archivo) throws IOException;
     protected abstract String construirUrl(T datos) throws IOException;
+    protected abstract String getMetodoHttp();
+
 
     public void ejecutarServicio(String archivo) throws Exception {
+
         List<T> datosLista = cargarDatos(archivo);
         for (T datos : datosLista) {
             String urlServicio = construirUrl(datos);
             String peticion = generarPeticion(datos);
             String firma = generarFirma(datos);
-            String respuesta = sendRequest(urlServicio, "POST", getHeaders(firma), peticion);
+            String respuesta = sendRequest(urlServicio, getMetodoHttp(), getHeaders(firma), peticion);
             procesarRespuesta(respuesta);
         }
     }
-
     protected Map<String, String> getHeaders(String firma) throws IOException {
         return Map.of(
                 "Content-Type", "application/json",
@@ -44,5 +45,9 @@ public abstract class ServicioBase<T> {
             properties.load(input);
             return properties.getProperty("urlServicioBase");
         }
+    }
+
+    protected List<T> cargarDatos(String archivo) throws IOException {
+        throw new UnsupportedOperationException("Método no implementado en la subclase");
     }
 }

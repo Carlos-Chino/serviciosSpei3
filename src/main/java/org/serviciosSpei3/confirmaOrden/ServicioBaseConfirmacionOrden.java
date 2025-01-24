@@ -1,44 +1,25 @@
 package org.serviciosSpei3.confirmaOrden;
 
-import org.serviciosSpei3.registroDeOrdenes.GuardarRegistroOrden;
-
+import org.serviciosSpei3.controles.ServicioBase;
+import org.serviciosSpei3.registroDeOrdenes.GuardarRegistroOperacion;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 
-import static org.serviciosSpei3.controles.HttpClient.sendRequest;
-import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
-
-public abstract class ServicioBaseConfirmacionOrden {
-    private static final String certificado = "1733350443035";
-    private static final String servicioBase = "src/main/resources/propiedades.properties";
+public abstract class ServicioBaseConfirmacionOrden extends ServicioBase<datosConfirmaOrden> {
 
     protected abstract String generarPeticion(datosConfirmaOrden confirmaOrden);
     protected abstract String generarFirma(datosConfirmaOrden confirmaOrden);
-    protected abstract void inicializarDatos(datosConfirmaOrden confirmaOrden);
 
-    public void ejecutarServicio(String archivo) throws Exception {
-        List<datosConfirmaOrden> confirmaOrdenes = cargarDatosConfirmaOrden(archivo);
-        for (datosConfirmaOrden confirmaOrden : confirmaOrdenes) {
-            inicializarDatos(confirmaOrden);
-            String urlServicio = construirUrl(confirmaOrden.getOrdenId());
-            String peticion = generarPeticion(confirmaOrden);
-            String firma = generarFirma(confirmaOrden);
-            String respuesta = sendRequest(urlServicio, "POST", getHeaders(firma), peticion);
-            new GuardarRegistroOrden(respuesta, "claveRastreoOrdenConfirmada.txt");
-        }
+    @Override
+    protected String construirUrl(datosConfirmaOrden confirmaOrden) throws IOException {
+        return getUrlServicioBase() + "/api/v1/ordenes/recepciones/confirma?ordenId=" + confirmaOrden.getOrdenId();
     }
 
-    private String construirUrl(String ordenId) throws IOException {
-        return getUrlServicioBase() + "/api/v1/ordenes/recepciones/confirma?ordenId=" + ordenId;
-    }
-
-    protected List<datosConfirmaOrden> cargarDatosConfirmaOrden(String archivo) throws IOException {
+    @Override
+    protected List<datosConfirmaOrden> cargarDatos(String archivo) throws IOException {
         List<datosConfirmaOrden> confirmaOrdenes = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -60,20 +41,12 @@ public abstract class ServicioBaseConfirmacionOrden {
         return confirmaOrdenes;
     }
 
-    protected Map<String, String> getHeaders(String firma) throws IOException {
-        return Map.of(
-                "Content-Type", "application/json",
-                "Authorization", "Bearer " + loadAccessToken(),
-                "X-EF-Firma", firma.trim(),
-                "X-EF-Certificado", certificado
-        );
+    @Override
+    protected void procesarRespuesta(String respuesta) {
+        new GuardarRegistroOperacion(respuesta, "claveRastreoOrdenConfirmada.txt","ordenId");
     }
 
-    public String getUrlServicioBase() throws IOException {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream(servicioBase)) {
-            properties.load(input);
-            return properties.getProperty("urlServicioBase");
-        }
-    }
+    @Override
+    protected String getMetodoHttp() {return "POST";}
+
 }

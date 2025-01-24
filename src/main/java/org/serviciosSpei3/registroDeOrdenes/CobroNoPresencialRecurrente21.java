@@ -1,17 +1,19 @@
 package org.serviciosSpei3.registroDeOrdenes;
 import org.serviciosSpei3.controles.CryptoHandler;
 import java.io.IOException;
+import java.util.List;
 
 
 public class CobroNoPresencialRecurrente21 extends ServicioBaseGenerarOrden {
-    @Override
-    protected void inicializarDatos() throws IOException {
+
+    public CobroNoPresencialRecurrente21() throws IOException {
         super.inicializarDatos();
         datosOrdenes.setTipoPago(21);
     }
 
     @Override
-    protected String generarPeticion() {
+    protected String generarPeticion(DatosOrdenes datosOrdenes) {
+        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
         StringBuilder peticion = new StringBuilder();
         peticion.append("{");
         peticion.append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n");
@@ -45,7 +47,8 @@ public class CobroNoPresencialRecurrente21 extends ServicioBaseGenerarOrden {
     }
 
     @Override
-    protected String generarFirma() {
+    protected String generarFirma(DatosOrdenes datosOrdenes) {
         return new CryptoHandler().ordenCobroNoPresencialRecurrenteT21(datosOrdenes);
     }
+
 }
