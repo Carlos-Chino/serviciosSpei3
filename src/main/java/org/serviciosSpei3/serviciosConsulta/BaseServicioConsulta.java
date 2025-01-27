@@ -14,7 +14,12 @@ import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
 
 public abstract class BaseServicioConsulta {
     private String respuesta;
+    private String propositoConsulta;
     private static final String propiedades = "src/main/resources/propiedades.properties";
+
+    public BaseServicioConsulta(String propositoConsulta) {
+        this.propositoConsulta = propositoConsulta;
+    }
 
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {return buildUrlImpl(parametros, params);}
     protected String buildUrl(String ordenId) throws IOException {return buildUrlImpl(ordenId);}

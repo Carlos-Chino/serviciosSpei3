@@ -9,6 +9,12 @@ import java.util.StringJoiner;
 public class SearchOrdenesRecibidasPendientes extends BaseServicioConsulta {
 
     private static final String urlServicio = "/api/v2/ordenes/recepciones/search-pendientes";
+    private String propositoConsulta;
+    public SearchOrdenesRecibidasPendientes(String propositoConsulta) {
+        super(propositoConsulta);
+        this.propositoConsulta=propositoConsulta;
+    }
+
     @Override
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {
         String fechaOperacion = parametros.get("fechaOperacion");
@@ -30,7 +36,7 @@ public class SearchOrdenesRecibidasPendientes extends BaseServicioConsulta {
     }
 
     protected void guardarOrdenesRecibidasPendientes(String respuesta) {
-        guardarOrdenes(respuesta, "SearchOrdenesRecibidasPendientes.txt", false);
+        guardarOrdenes(respuesta, "SearchOrdenesRecibidasPendientes"+this.propositoConsulta+".txt", false);
     }
 
     @Override

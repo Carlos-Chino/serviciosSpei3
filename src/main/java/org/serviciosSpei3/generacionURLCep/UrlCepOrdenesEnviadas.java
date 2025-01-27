@@ -6,6 +6,10 @@ import java.io.IOException;
 public class UrlCepOrdenesEnviadas extends BaseServicioConsulta {
     private static final String urlServicio = "/api/v1/ordenes/envios/url-cep?id=";
 
+    public UrlCepOrdenesEnviadas() {
+        super(null);
+    }
+
     @Override
     protected String buildUrl(String claveRastreo) throws IOException {
         return getUrlServicioBase()+urlServicio+ claveRastreo;
@@ -18,6 +22,6 @@ public class UrlCepOrdenesEnviadas extends BaseServicioConsulta {
 
     @Override
     protected String getTipoConsulta() {
-        return "consulta";
+        return "search";
     }
 }

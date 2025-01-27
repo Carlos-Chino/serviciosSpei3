@@ -9,6 +9,7 @@ public class ConsultaConexion extends BaseServicioConsulta {
     private String instancia;
 
     public ConsultaConexion(String claveInstitucion, String instancia) {
+        super(null);
         this.claveInstitucion = claveInstitucion;
         this.instancia = instancia;
     }

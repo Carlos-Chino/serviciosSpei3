@@ -5,6 +5,11 @@ import java.io.IOException;
 
 public class ConsultaOrdenesEnviadas extends BaseServicioConsulta {
     private static final String servicio = "/api/v1/ordenes/envios/consulta?id=";
+    private String propositoConsulta;
+    public ConsultaOrdenesEnviadas(String propositoConsulta) {
+        super(propositoConsulta);
+        this.propositoConsulta=propositoConsulta;
+    }
 
     @Override
     public String buildUrl(String claveRastreo) throws IOException {
@@ -17,6 +22,6 @@ public class ConsultaOrdenesEnviadas extends BaseServicioConsulta {
     }
 
     protected void guardarOrdenesEnviadas(String respuesta) {
-        guardarOrdenes(respuesta, "ConsultaOrdenesEnviadas.txt", true);
+        guardarOrdenes(respuesta, "ConsultaOrdenesEnviadas"+this.propositoConsulta+".txt", true);
     }
 }

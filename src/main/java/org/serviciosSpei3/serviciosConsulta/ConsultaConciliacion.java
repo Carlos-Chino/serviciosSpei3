@@ -6,8 +6,9 @@ import java.util.Map;
 public class ConsultaConciliacion extends BaseServicioConsulta {
     private String institucion;
     private String instancia;
-
+    private String propositoConsulta;
     public ConsultaConciliacion(String institucion, String instancia) {
+        super(null);
         this.institucion = institucion;
         this.instancia = instancia;
     }

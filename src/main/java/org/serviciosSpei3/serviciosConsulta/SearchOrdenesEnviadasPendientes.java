@@ -8,6 +8,11 @@ import java.util.StringJoiner;
 
 public class SearchOrdenesEnviadasPendientes extends BaseServicioConsulta {
     private static final String servicio = "/api/v2/ordenes/envios/search-pendientes";
+    private String propositoConsulta;
+    public SearchOrdenesEnviadasPendientes(String propositoConsulta) {
+        super(propositoConsulta);
+        this.propositoConsulta=propositoConsulta;
+    }
 
     @Override
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {
@@ -35,7 +40,7 @@ public class SearchOrdenesEnviadasPendientes extends BaseServicioConsulta {
     }
 
     protected void guardarOrdenesEnvPendientes(String respuesta) {
-        guardarOrdenes(respuesta, "SearchOrdenesEnviadasPendientes.txt", false);
+        guardarOrdenes(respuesta, "SearchOrdenesEnviadasPendientes"+this.propositoConsulta+".txt", false);
     }
 
 }

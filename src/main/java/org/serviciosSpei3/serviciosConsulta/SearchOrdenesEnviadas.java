@@ -6,6 +6,11 @@ import static org.serviciosSpei3.controles.DateUtil.getTimeRangeForOperacion;
 
 public class SearchOrdenesEnviadas extends BaseServicioConsulta {
     private final String servicio="/api/v1/ordenes/envios/search";
+    private String propositoConsulta;
+    public SearchOrdenesEnviadas(String propositoConsulta) {
+        super(propositoConsulta);
+        this.propositoConsulta=propositoConsulta;
+    }
     @Override
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {
 
@@ -38,6 +43,6 @@ public class SearchOrdenesEnviadas extends BaseServicioConsulta {
     }
 
     protected void guardarOrdenesEnv(String respuesta) {
-        guardarOrdenes(respuesta, "SearchOrdenesEnviadas.txt", false);
+        guardarOrdenes(respuesta, "SearchOrdenesEnviadas"+this.propositoConsulta+".txt", false);
     }
 }

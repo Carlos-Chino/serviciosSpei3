@@ -4,8 +4,11 @@ import java.io.IOException;
 public class ConsultaOrdenesRecibidasV2 extends BaseServicioConsulta {
     private static final String servicio = "/api/v2/ordenes/recepciones/consulta?id=";
     private Integer tipoPago;
-    public ConsultaOrdenesRecibidasV2(Integer tipoPago) {
+    private String propositoConsulta;
+    public ConsultaOrdenesRecibidasV2(Integer tipoPago, String propositoConsulta) {
+        super(propositoConsulta);
         this.tipoPago = tipoPago;
+        this.propositoConsulta=propositoConsulta;
     }
 
     @Override
@@ -14,7 +17,7 @@ public class ConsultaOrdenesRecibidasV2 extends BaseServicioConsulta {
     }
 
     protected void guardarOrdenesRecV2(String respuesta) {
-        guardarOrdenes(respuesta, "ConsultaOrdenesRecibidas.txt", true);
+        guardarOrdenes(respuesta, "ConsultaOrdenesRecibidas"+this.propositoConsulta+".txt", true);
     }
 
     @Override
