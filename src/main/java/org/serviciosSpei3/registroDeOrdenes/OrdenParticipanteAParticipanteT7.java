@@ -23,7 +23,6 @@ public class OrdenParticipanteAParticipanteT7 extends ServicioBaseGenerarOrden {
                 .append("\"detalle\":{")
                 .append("\"conceptoPago\":\"").append(datosOrdenes.getConceptoPago()).append("\",\n")
                 .append("\"referenciaNumerica\":\"").append(datosOrdenes.getReferenciaNumerica()).append("\",\n")
-                //.append("\"iva\":\"").append(datosOrdenes.getIva()).append("\",\n")
                 .append("\"tipoOperacion\":\"").append(datosOrdenes.getTipoOperacion()).append("\"}")
                 .append("}");
         return peticion.toString();

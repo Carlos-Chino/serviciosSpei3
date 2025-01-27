@@ -14,7 +14,6 @@ public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes
     private static final String propiedades = "src/main/resources/propiedades.properties";
     protected String fechaOperacion = fechaOperacion();
     protected DatosOrdenes datosOrdenes;
-
     public ServicioBaseGenerarOrden() throws IOException {
         this.datosOrdenes = new DatosOrdenes();
         inicializarDatos();
@@ -50,7 +49,8 @@ public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes
         datosOrdenes.setNumCelularBeneficiario("5624128162");
         datosOrdenes.setDigitoIdBeneficiario(0);
         datosOrdenes.setConceptoPago("PruebasSTP");
-       // datosOrdenes.setIva(new BigDecimal("0.00"));
+        datosOrdenes.setConceptoPago2("PruebasSTP2");
+        // datosOrdenes.setIva(new BigDecimal("0.00"));
         datosOrdenes.setReferenciaNumerica(250113);
         datosOrdenes.setReferenciaCobranza(123456);
         datosOrdenes.setPagoComision(0);
@@ -64,6 +64,7 @@ public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes
         datosOrdenes.setTipoCuentaBeneficiario2(40);
         datosOrdenes.setCuentaBeneficiario2("846180000000000016");
         datosOrdenes.setRfcCurpBeneficiario2("PRUE211130H54");
+        datosOrdenes.setClavePago("2012345876");
         return List.of(datosOrdenes);
     }
 

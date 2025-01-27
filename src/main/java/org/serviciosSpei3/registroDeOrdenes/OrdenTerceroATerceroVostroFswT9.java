@@ -1,16 +1,17 @@
 package org.serviciosSpei3.registroDeOrdenes;
+
 import org.serviciosSpei3.controles.CryptoHandler;
+
 import java.io.IOException;
 
-public class OrdenTerceroATerceroT1 extends ServicioBaseGenerarOrden {
-
-    public OrdenTerceroATerceroT1() throws IOException {
+public class OrdenTerceroATerceroVostroFswT9 extends ServicioBaseGenerarOrden{
+    public OrdenTerceroATerceroVostroFswT9() throws IOException {
         super.inicializarDatos();
-        datosOrdenes.setTipoPago(1);
+        datosOrdenes.setTipoPago(9);
     }
 
     @Override
-    protected String generarPeticion(DatosOrdenes datosOrdenes) {
+    protected String generarPeticion(DatosOrdenes datos) {
         datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
         StringBuilder peticion = new StringBuilder();
         peticion.append("{")
@@ -29,16 +30,20 @@ public class OrdenTerceroATerceroT1 extends ServicioBaseGenerarOrden {
                 .append("\"nombreBeneficiario\":\"").append(valueNull(datosOrdenes.getNombreBeneficiario())).append("\",\n")
                 .append("\"tipoCuentaBeneficiario\":\"").append(valueNull(datosOrdenes.getTipoCuentaBeneficiario())).append("\",\n")
                 .append("\"cuentaBeneficiario\":\"").append(valueNull(datosOrdenes.getCuentaBeneficiario())).append("\",\n")
-                .append("\"rfcCurpBeneficiario\":\"").append(valueNull(datosOrdenes.getRfcCurpBeneficiario())).append("\",\n")
+                .append("\"nombreBeneficiario2\":\"").append(valueNull(datosOrdenes.getNombreBeneficiario2())).append("\",\n")
+                .append("\"rfcCurpBeneficiario2\":\"").append(valueNull(datosOrdenes.getRfcCurpBeneficiario2())).append("\",\n")
+                .append("\"tipoCuentaBeneficiario2\":\"").append(valueNull(datosOrdenes.getTipoCuentaBeneficiario2())).append("\",\n")
+                .append("\"cuentaBeneficiario2\":\"").append(valueNull(datosOrdenes.getCuentaBeneficiario2())).append("\",\n")
                 .append("\"conceptoPago\":\"").append(valueNull(datosOrdenes.getConceptoPago())).append("\",\n")
-                .append("\"referenciaNumerica\":\"").append(valueNull(datosOrdenes.getReferenciaNumerica())).append("\",\n")
-                .append("\"referenciaCobranza\":\"").append(valueNull(datosOrdenes.getReferenciaCobranza())).append("\"}")
+                .append("\"conceptoPago2\":\"").append(valueNull(datosOrdenes.getConceptoPago2())).append("\",\n")
+                .append("\"referenciaNumerica\":\"").append(valueNull(datosOrdenes.getReferenciaNumerica())).append("\"}")
                 .append("}");
         return peticion.toString();
     }
 
     @Override
-    protected String generarFirma(DatosOrdenes datosOrdenes) {
-        return new CryptoHandler().ordenTerceroATerceroT1(datosOrdenes);
+    protected String generarFirma(DatosOrdenes datos) {
+        return new CryptoHandler().ordenTerceroATerceroVostroFswT9(datosOrdenes);
+
     }
 }

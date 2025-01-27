@@ -8,25 +8,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Properties;
 
 public class CryptoHandler {
     private static String firma;
     private static String fechaOperacion = fechaOperacion();
-    private static String fechaOperacion() {
-        LocalTime currentTime = LocalTime.now();
-        LocalDate currentDate = LocalDate.now();
-        if (currentTime.isAfter(LocalTime.of(18, 0))) {
-            currentDate = currentDate.plusDays(1);
-        }
-        return currentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
 
     public String devolucionNoAcreditadaT0(DatosDevolucion devolucion) {
         String cadenaOriginal = cadenaDevolucionNoAcreditadaT0(devolucion);
@@ -62,9 +52,34 @@ public class CryptoHandler {
         firma = signMessage(cadenaOriginal);
         return firma;
     }
-
     public String ordenTerceroATerceroT1(DatosOrdenes ordenes) {
         String cadenaOriginal = cadenaTerceroATerceroT1(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+
+    public String ordenTerceroAVentanillaT2(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaTerceroAVentanillaT2(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenTerceroATerceroVostroT3(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaTerceroATerceroVostroT3(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenTerceroAParticipanteT4(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaTerceroAParticipanteT4(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenParticipanteATerceroT5(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaParticipanteATerceroT5(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenParticipanteATerceroVostroT6(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaParticipanteATerceroVostroT6(ordenes);
         firma = signMessage(cadenaOriginal);
         return firma;
     }
@@ -73,6 +88,27 @@ public class CryptoHandler {
         firma = signMessage(cadenaOriginal);
         return firma;
     }
+    public String ordenTerceroATerceroFswT8(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaTerceroATerceroFswT8(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenTerceroATerceroVostroFswT9(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaTerceroATerceroVostroFswT9(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenParticipanteATerceroFswT10(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaParticipanteATerceroFswT10(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+    public String ordenParticipanteATerceroVostroFwsT11(DatosOrdenes ordenes) {
+        String cadenaOriginal = cadenaParticipanteATerceroVostroFwsT11(ordenes);
+        firma = signMessage(cadenaOriginal);
+        return firma;
+    }
+
     public String ordenCobroPresencialUnaOcasionT19(DatosOrdenes ordenes) {
         String cadenaOriginal = cadenaCobroPresencialUnaOcasionT19(ordenes);
         firma = signMessage(cadenaOriginal);
@@ -106,25 +142,6 @@ public class CryptoHandler {
         return firma;
     }
 
-    public static String cadenaParticipanteAParticipanteT7(DatosOrdenes orden) {
-        StringBuilder cadenaOriginal = new StringBuilder();
-        cadenaOriginal.append("||");
-        cadenaOriginal.append(fechaOperacion).append("|");
-        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
-        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
-        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
-        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
-        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
-        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
-        cadenaOriginal.append(orden.getTipoOperacion() == null ? "" : orden.getTipoOperacion()).append("|");
-        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
-        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
-        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
-        cadenaOriginal.append("||");
-        System.out.println("Cadena original: " + cadenaOriginal);
-        return cadenaOriginal.toString();
-    }
-
     public static String cadenaTerceroATerceroT1(DatosOrdenes orden) {
         StringBuilder cadenaOriginal = new StringBuilder();
         cadenaOriginal.append("||");
@@ -151,7 +168,252 @@ public class CryptoHandler {
         System.out.println("Cadena original: " + cadenaOriginal);
         return cadenaOriginal.toString();
     }
+    public static String cadenaTerceroAVentanillaT2(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreOrdenante() == null ? "" : orden.getNombreOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaOrdenante() == null ? "" : orden.getTipoCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getCuentaOrdenante() == null ? "" : orden.getCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpOrdenante() == null ? "" : orden.getRfcCurpOrdenante()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getClavePago() == null ? "" : orden.getClavePago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
 
+    public static String cadenaTerceroATerceroVostroT3(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreOrdenante() == null ? "" : orden.getNombreOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaOrdenante() == null ? "" : orden.getTipoCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getCuentaOrdenante() == null ? "" : orden.getCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpOrdenante() == null ? "" : orden.getRfcCurpOrdenante()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario2() == null ? "" : orden.getNombreBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario2() == null ? "" : orden.getRfcCurpBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario2() == null ? "" : orden.getTipoCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario2() == null ? "" : orden.getCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago2() == null ? "" : orden.getConceptoPago2()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaTerceroAParticipanteT4(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreOrdenante() == null ? "" : orden.getNombreOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaOrdenante() == null ? "" : orden.getTipoCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getCuentaOrdenante() == null ? "" : orden.getCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpOrdenante() == null ? "" : orden.getRfcCurpOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoOperacion() == null ? "" : orden.getTipoOperacion()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaParticipanteATerceroT5(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario() == null ? "" : orden.getRfcCurpBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaParticipanteATerceroVostroT6(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario2() == null ? "" : orden.getNombreBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario2() == null ? "" : orden.getRfcCurpBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario2() == null ? "" : orden.getTipoCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario2() == null ? "" : orden.getCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago2() == null ? "" : orden.getConceptoPago2()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaParticipanteAParticipanteT7(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getTipoOperacion() == null ? "" : orden.getTipoOperacion()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+    public static String cadenaTerceroATerceroFswT8(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreOrdenante() == null ? "" : orden.getNombreOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaOrdenante() == null ? "" : orden.getTipoCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getCuentaOrdenante() == null ? "" : orden.getCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpOrdenante() == null ? "" : orden.getRfcCurpOrdenante()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario() == null ? "" : orden.getRfcCurpBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica()).append("|");
+        cadenaOriginal.append(orden.getReferenciaCobranza() == null ? "" : orden.getReferenciaCobranza());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaTerceroATerceroVostroFswT9(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreOrdenante() == null ? "" : orden.getNombreOrdenante()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaOrdenante() == null ? "" : orden.getTipoCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getCuentaOrdenante() == null ? "" : orden.getCuentaOrdenante()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpOrdenante() == null ? "" : orden.getRfcCurpOrdenante()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario2() == null ? "" : orden.getNombreBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario2() == null ? "" : orden.getRfcCurpBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario2() == null ? "" : orden.getTipoCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario2() == null ? "" : orden.getCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago2() == null ? "" : orden.getConceptoPago2()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaParticipanteATerceroFswT10(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario() == null ? "" : orden.getRfcCurpBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
+
+    public static String cadenaParticipanteATerceroVostroFwsT11(DatosOrdenes orden) {
+        StringBuilder cadenaOriginal = new StringBuilder();
+        cadenaOriginal.append("||");
+        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(orden.getInstitucionOrdenante() == null ? "" : orden.getInstitucionOrdenante()).append("|");
+        cadenaOriginal.append(orden.getInstancia() == null ? "" : orden.getInstancia()).append("|");
+        cadenaOriginal.append(orden.getInstitucionBeneficiaria() == null ? "" : orden.getInstitucionBeneficiaria()).append("|");
+        cadenaOriginal.append(orden.getClaveRastreo() == null ? "" : orden.getClaveRastreo()).append("|");
+        cadenaOriginal.append(orden.getMonto() == null ? "" : orden.getMonto()).append("|");
+        cadenaOriginal.append(orden.getTipoPago() == null ? "" : orden.getTipoPago()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario() == null ? "" : orden.getNombreBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario() == null ? "" : orden.getTipoCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario() == null ? "" : orden.getCuentaBeneficiario()).append("|");
+        cadenaOriginal.append(orden.getNombreBeneficiario2() == null ? "" : orden.getNombreBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getRfcCurpBeneficiario2() == null ? "" : orden.getRfcCurpBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getTipoCuentaBeneficiario2() == null ? "" : orden.getTipoCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getCuentaBeneficiario2() == null ? "" : orden.getCuentaBeneficiario2()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago() == null ? "" : orden.getConceptoPago()).append("|");
+        cadenaOriginal.append(orden.getConceptoPago2() == null ? "" : orden.getConceptoPago2()).append("|");
+        cadenaOriginal.append(orden.getIva() == null ? "" : orden.getIva()).append("|");
+        cadenaOriginal.append(orden.getReferenciaNumerica() == null ? "" : orden.getReferenciaNumerica());
+        cadenaOriginal.append("||");
+        System.out.println("Cadena original: " + cadenaOriginal);
+        return cadenaOriginal.toString();
+    }
 
     public static String cadenaCobroPresencialUnaOcasionT19(DatosOrdenes orden) {
         StringBuilder cadenaOriginal = new StringBuilder();
@@ -446,5 +708,14 @@ public class CryptoHandler {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static String fechaOperacion() {
+        LocalTime currentTime = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
+        if (currentTime.isAfter(LocalTime.of(18, 0))) {
+            currentDate = currentDate.plusDays(1);
+        }
+        return currentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }

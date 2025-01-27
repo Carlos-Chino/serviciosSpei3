@@ -11,13 +11,11 @@ import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
 public abstract class ServicioBase<T> {
     private static final String CERTIFICADO = "1733350443035";
     private static final String PROPIEDADES = "src/main/resources/propiedades.properties";
-
     protected abstract String generarPeticion(T datos);
     protected abstract String generarFirma(T datos);
     protected abstract void procesarRespuesta(String respuesta);
     protected abstract String construirUrl(T datos) throws IOException;
     protected abstract String getMetodoHttp();
-
 
     public void ejecutarServicio(String archivo) throws Exception {
 

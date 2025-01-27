@@ -1,16 +1,17 @@
 package org.serviciosSpei3.registroDeOrdenes;
+
 import org.serviciosSpei3.controles.CryptoHandler;
 import java.io.IOException;
 
-public class OrdenTerceroATerceroT1 extends ServicioBaseGenerarOrden {
+public class OrdenTerceroATerceroFswT8 extends ServicioBaseGenerarOrden{
 
-    public OrdenTerceroATerceroT1() throws IOException {
+    public OrdenTerceroATerceroFswT8() throws IOException {
         super.inicializarDatos();
-        datosOrdenes.setTipoPago(1);
+        datosOrdenes.setTipoPago(8);
     }
 
     @Override
-    protected String generarPeticion(DatosOrdenes datosOrdenes) {
+    protected String generarPeticion(DatosOrdenes datos) {
         datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
         StringBuilder peticion = new StringBuilder();
         peticion.append("{")
@@ -38,7 +39,7 @@ public class OrdenTerceroATerceroT1 extends ServicioBaseGenerarOrden {
     }
 
     @Override
-    protected String generarFirma(DatosOrdenes datosOrdenes) {
-        return new CryptoHandler().ordenTerceroATerceroT1(datosOrdenes);
+    protected String generarFirma(DatosOrdenes datos) {
+        return new CryptoHandler().ordenTerceroATerceroFswT8(datosOrdenes);
     }
 }

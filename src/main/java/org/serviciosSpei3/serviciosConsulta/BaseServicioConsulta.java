@@ -181,7 +181,6 @@ public abstract class BaseServicioConsulta {
                 orden.optString("estadoDevolucion", "SNE"));
     }
 
-
     private static Properties cargarPropiedadesDesdeArchivo() throws IOException {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream(propiedades)) {
