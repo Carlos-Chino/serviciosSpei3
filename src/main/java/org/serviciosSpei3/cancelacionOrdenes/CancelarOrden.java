@@ -42,7 +42,7 @@ public class CancelarOrden extends ServicioBase<datosCancelarOrden> {
 
     @Override
     protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOperacion(respuesta, "ordenIdCancelada.txt","ordenId");
+        new GuardarRegistroOperacion(respuesta, "OrdenIdCancelada.txt","ordenId");
     }
 
     @Override

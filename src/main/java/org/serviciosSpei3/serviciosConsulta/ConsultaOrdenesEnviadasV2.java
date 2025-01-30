@@ -7,7 +7,6 @@ public class ConsultaOrdenesEnviadasV2 extends BaseServicioConsulta {
     private Integer tipoPago;
     private String propositoConsulta;
     public ConsultaOrdenesEnviadasV2(Integer tipoPago, String propositoConsulta) {
-        super(propositoConsulta);
         this.tipoPago=tipoPago;
         this.propositoConsulta=propositoConsulta;
     }
@@ -21,8 +20,4 @@ public class ConsultaOrdenesEnviadasV2 extends BaseServicioConsulta {
         guardarOrdenes(respuesta, "ConsultaOrdenesEnviadas"+this.propositoConsulta+".txt", true);
     }
 
-    @Override
-    protected String getTipoConsulta() {
-        return "consulta";
-    }
 }

@@ -43,7 +43,7 @@ public abstract class ServicioBaseConfirmacionOrden extends ServicioBase<datosCo
 
     @Override
     protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOperacion(respuesta, "claveRastreoOrdenConfirmada.txt","ordenId");
+        new GuardarRegistroOperacion(respuesta, "OrdenIdConfirmada.txt","ordenId");
     }
 
     @Override

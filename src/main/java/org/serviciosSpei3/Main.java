@@ -5,11 +5,11 @@ import org.serviciosSpei3.controles.KeycloakService;
 public class Main {
     public static void main(String[] args) throws Exception {
         //new KeycloakService().login();
-        new ServicioFactory("PagosVariosTipos");
+        new ServicioFactory("OrdenTerceroAVentanillaT2");
     }
 }
 
-/*Copia y pega en el main el servicio que se quiera ejecutar
+/*Copia y pega en el main el servicio que se necesita ejecutar
 
 ****Envío de ordenes****
 OrdenTerceroATerceroT1

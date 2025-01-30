@@ -77,7 +77,7 @@ public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes
         return currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
-    public void ejecutarMultiple() throws IOException {
+    public void ejecutarServicio() throws IOException {
         Integer numeroEjecuciones;
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream(propiedades)) {
@@ -100,7 +100,7 @@ public abstract class ServicioBaseGenerarOrden extends ServicioBase<DatosOrdenes
 
     @Override
     protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOperacion(respuesta, "OrdenesIdEnviadas.txt","ordenId");
+        new GuardarRegistroOperacion(respuesta, "OrdenesIdEnviadasT"+datosOrdenes.getTipoPago()+".txt","ordenId");
     }
 
     protected Properties cargarPropiedadesEnvioPagos() throws IOException {

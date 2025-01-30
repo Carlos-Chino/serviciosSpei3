@@ -10,7 +10,7 @@ public class OrdenParticipanteATerceroVostroT6 extends ServicioBaseGenerarOrden{
 
     @Override
     protected String generarPeticion(DatosOrdenes datos) {
-        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
+        datosOrdenes.setClaveRastreo("PagoT6SPEI3QA" + (System.currentTimeMillis() % 100000));
         StringBuilder peticion = new StringBuilder();
         peticion.append("{")
         .append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n")

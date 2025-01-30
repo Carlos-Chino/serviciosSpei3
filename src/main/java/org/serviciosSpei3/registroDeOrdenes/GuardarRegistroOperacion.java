@@ -22,7 +22,7 @@ public class GuardarRegistroOperacion {
         guardarClaveRastreoEnArchivo();
     }
 
-    public String extraerRegistroOperacion() {
+    private String extraerRegistroOperacion() {
         try {
             JSONObject jsonResponse = new JSONObject(respuesta);
             if (!jsonResponse.has("info") || jsonResponse.isNull("info")) {
@@ -38,7 +38,7 @@ public class GuardarRegistroOperacion {
         }
     }
 
-    public void guardarClaveRastreoEnArchivo() {
+    private void guardarClaveRastreoEnArchivo() {
         File archivo = new File(nombreArchivo);
         Set<String> existingLines = new HashSet<>();
 

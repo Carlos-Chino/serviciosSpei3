@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.serviciosSpei3.generacionURLCep.UrlCepOrdenesEnviadas;
 import org.serviciosSpei3.generacionURLCep.UrlCepOrdenesRecibidas;
-
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,20 +13,14 @@ import static org.serviciosSpei3.controles.KeycloakService.loadAccessToken;
 
 public abstract class BaseServicioConsulta {
     private String respuesta;
-    private String propositoConsulta;
     private static final String propiedades = "src/main/resources/propiedades.properties";
-
-    public BaseServicioConsulta(String propositoConsulta) {
-        this.propositoConsulta = propositoConsulta;
-    }
 
     protected String buildUrl(Map<String, String> parametros, Map<String, String> params) throws IOException {return buildUrlImpl(parametros, params);}
     protected String buildUrl(String ordenId) throws IOException {return buildUrlImpl(ordenId);}
     protected String buildUrl() throws IOException {return buildUrlImpl();}
-    private String buildUrlImpl(Object... params) throws IOException {
+    private String buildUrlImpl(Object... params) {
         throw new UnsupportedOperationException("Método buildUrl debe ser implementado.");
     }
-    protected abstract String getTipoConsulta();
     private Map<String, String> getHeaders() throws IOException {
         return Map.of("Content-Type", "application/json", "Authorization", "Bearer " + loadAccessToken());
     }
@@ -101,15 +94,28 @@ public abstract class BaseServicioConsulta {
 
 
     protected List<String> leerIdOrdenArchivo(String archivo) throws Exception {
-        int columna = getColumnaPorTipoConsulta();
         List<String> listOrdenId = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            reader.readLine();
+            String header = reader.readLine();
+            if (header == null) {
+                throw new IllegalArgumentException("El archivo está vacío o no tiene encabezado.");
+            }
+            String[] columnas = header.split("\\|");
+            int columnaOrdenId = -1;
+            for (int i = 0; i < columnas.length; i++) {
+                if (columnas[i].equalsIgnoreCase("ordenId")) {
+                    columnaOrdenId = i;
+                    break;
+                }
+            }
+            if (columnaOrdenId == -1) {
+                throw new IllegalArgumentException("No se encontró la columna 'ordenId' en el encabezado.");
+            }
             String linea;
             while ((linea = reader.readLine()) != null) {
                 String[] datos = linea.split("\\|");
-                if (columna < datos.length) {
-                    listOrdenId.add(datos[columna]);
+                if (columnaOrdenId < datos.length) {
+                    listOrdenId.add(datos[columnaOrdenId]);
                 } else {
                     throw new IllegalArgumentException("El índice de la columna excede el número de columnas en la línea.");
                 }
@@ -118,16 +124,6 @@ public abstract class BaseServicioConsulta {
         return listOrdenId;
     }
 
-    private int getColumnaPorTipoConsulta() {
-        switch (getTipoConsulta()) {
-            case "consulta":
-                return 0;
-            case "search":
-                return 5;
-            default:
-                throw new IllegalArgumentException("Tipo de columna no válido: " + getTipoConsulta());
-        }
-    }
 
     protected void guardarOrdenes(String respuesta, String nombreArchivo, boolean isConsulta) {
         JSONObject respuestaJson = new JSONObject(respuesta);
@@ -164,9 +160,10 @@ public abstract class BaseServicioConsulta {
 
     private void escribirCabecera(BufferedWriter writer) throws IOException {
         writer.write("institucionOrdenante|instancia|institucionBeneficiaria|claveRastreo|tipoPago|ordenId|"
-                + "nombreOrdenante|rfcCurpOrdenante|nombreBeneficiario|rfcCurpBeneficiario|monto|estado|estadoCDA|estadoDevolucion\n");
+                + "nombreOrdenante|rfcCurpOrdenante|nombreBeneficiario|rfcCurpBeneficiario|fechaOperacion|monto|estado|estadoCDA|estadoDevolucion\n");
     }
 
+    /*
     private String construirRegistro(JSONObject orden) {
         JSONObject detalle = orden.optJSONObject("detalle");
         return String.join("|",
@@ -180,6 +177,36 @@ public abstract class BaseServicioConsulta {
                 detalle.optString("rfcCurpOrdenante", "N/A"),
                 detalle.optString("nombreBeneficiario", "N/A"),
                 detalle.optString("rfcCurpBeneficiario", "N/A"),
+                orden.optString("monto", "N/A"),
+                orden.optString("estado", "SNE"),
+                orden.optString("estadoCDA", "SNE"),
+                orden.optString("estadoDevolucion", "SNE"));
+    }
+*/
+
+    private String construirRegistro(JSONObject orden) {
+        JSONObject detalle = orden.optJSONObject("detalle");
+        String fechaOperacion = "N/A";
+        JSONArray fechaArray = orden.optJSONArray("fechaOperacion");
+        if (fechaArray != null && fechaArray.length() == 3) {
+            int year = fechaArray.optInt(0);
+            int month = fechaArray.optInt(1);
+            int day = fechaArray.optInt(2);
+            fechaOperacion = String.format("%02d/%02d/%04d", day, month, year);
+        }
+
+        return String.join("|",
+                orden.optString("institucionOrdenante", "N/A"),
+                orden.optString("instancia", "N/A"),
+                orden.optString("institucionBeneficiaria", "N/A"),
+                orden.optString("claveRastreo", "N/A"),
+                String.valueOf(orden.optInt("tipoPago", 1)),
+                orden.optString("ordenId", "N/A"),
+                detalle.optString("nombreOrdenante", "N/A"),
+                detalle.optString("rfcCurpOrdenante", "N/A"),
+                detalle.optString("nombreBeneficiario", "N/A"),
+                detalle.optString("rfcCurpBeneficiario", "N/A"),
+                fechaOperacion,
                 orden.optString("monto", "N/A"),
                 orden.optString("estado", "SNE"),
                 orden.optString("estadoCDA", "SNE"),

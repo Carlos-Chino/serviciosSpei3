@@ -10,7 +10,6 @@ public class SearchOrdenesRecibidas extends BaseServicioConsulta {
     private static final String servicio = "/api/v1/ordenes/recepciones/search";
     private String propositoConsulta;
     public SearchOrdenesRecibidas(String propositoConsulta) {
-        super(propositoConsulta);
         this.propositoConsulta=propositoConsulta;
     }
     @Override
@@ -36,12 +35,7 @@ public class SearchOrdenesRecibidas extends BaseServicioConsulta {
         return url.toString();
     }
 
-    @Override
-    protected String getTipoConsulta() {
-        return "search";
-    }
-
     protected void guardarOrdenesRec(String respuesta) {
-        guardarOrdenes(respuesta, "SearchOrdenesRecibidas"+this.propositoConsulta+".txt", false);
+        guardarOrdenes(respuesta, "OrdenesRecibidas"+this.propositoConsulta+".txt", false);
     }
 }

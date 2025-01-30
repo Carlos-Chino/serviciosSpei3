@@ -5,13 +5,16 @@ import org.serviciosSpei3.registroDeOrdenes.GuardarRegistroOperacion;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ServicioBaseDevolucion extends ServicioBase<DatosDevolucion> {
     private Integer causaDevolucion;
-    public ServicioBaseDevolucion(Integer causaDevoluion) {
+    private String tipoDevolucion;
+    public ServicioBaseDevolucion(Integer causaDevoluion,String tipoDevolucion) {
         this.causaDevolucion=causaDevoluion;
+        this.tipoDevolucion=tipoDevolucion;
     }
 
     protected abstract String generarPeticion(DatosDevolucion devolucion);
@@ -41,6 +44,11 @@ public abstract class ServicioBaseDevolucion extends ServicioBase<DatosDevolucio
                 devolucion.setTipoPago(Integer.parseInt(datos[4]));
                 devolucion.setCausaDevolucion(this.causaDevolucion);
                 devolucion.setOrdenId(datos[5]);
+                devolucion.setFechaOperacion(datos[10]);
+                devolucion.setMonto(new BigDecimal(datos[11]));
+                devolucion.setMontoIntereses(new BigDecimal("0.01"));
+                devolucion.setIndicadorBeneficiario("1");
+                devolucion.setMontoDevolucion(new BigDecimal("0.01"));
                 devoluciones.add(devolucion);
             }
         }
@@ -48,6 +56,6 @@ public abstract class ServicioBaseDevolucion extends ServicioBase<DatosDevolucio
     }
 
     protected void procesarRespuesta(String respuesta) {
-        new GuardarRegistroOperacion(respuesta,"claveRastreoOrdenDevuelta.txt","ordenId");
+        new GuardarRegistroOperacion(respuesta,"OrdenId"+this.tipoDevolucion+".txt","ordenId");
     }
 }

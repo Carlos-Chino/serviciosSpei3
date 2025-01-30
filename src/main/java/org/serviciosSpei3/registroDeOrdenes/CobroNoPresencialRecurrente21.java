@@ -13,7 +13,7 @@ public class CobroNoPresencialRecurrente21 extends ServicioBaseGenerarOrden {
 
     @Override
     protected String generarPeticion(DatosOrdenes datosOrdenes) {
-        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
+        datosOrdenes.setClaveRastreo("PagoT21SPEI3QA" + (System.currentTimeMillis() % 100000));
         StringBuilder peticion = new StringBuilder();
         peticion.append("{");
         peticion.append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n");

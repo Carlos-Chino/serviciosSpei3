@@ -571,7 +571,7 @@ public class CryptoHandler {
     public static String cadenaDevolucionNoAcreditadaExtemporaneaT16(DatosDevolucion devolucion) {
         StringBuilder cadenaOriginal = new StringBuilder();
         cadenaOriginal.append("||");
-        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(devolucion.getFechaOperacion() == null ? fechaOperacion : devolucion.getFechaOperacion()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionOrdenante() == null ? "" : devolucion.getInstitucionOrdenante()).append("|");
         cadenaOriginal.append(devolucion.getInstancia() == null ? "" : devolucion.getInstancia()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionBeneficiaria() == null ? "" : devolucion.getInstitucionBeneficiaria()).append("|");
@@ -605,7 +605,7 @@ public class CryptoHandler {
     public static String cadenaDevolucionAcreditadaExtemporaneaT18(DatosDevolucion devolucion) {
         StringBuilder cadenaOriginal = new StringBuilder();
         cadenaOriginal.append("||");
-        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(devolucion.getFechaOperacion() == null ? fechaOperacion : devolucion.getFechaOperacion()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionOrdenante() == null ? "" : devolucion.getInstitucionOrdenante()).append("|");
         cadenaOriginal.append(devolucion.getInstancia() == null ? "" : devolucion.getInstancia()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionBeneficiaria() == null ? "" : devolucion.getInstitucionBeneficiaria()).append("|");
@@ -638,7 +638,7 @@ public class CryptoHandler {
     public static String cadenaDevolucionEspecialAcreditadaExtemporaneaT24(DatosDevolucion devolucion) {
         StringBuilder cadenaOriginal = new StringBuilder();
         cadenaOriginal.append("||");
-        cadenaOriginal.append(fechaOperacion).append("|");
+        cadenaOriginal.append(devolucion.getFechaOperacion() == null ? fechaOperacion : devolucion.getFechaOperacion()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionOrdenante() == null ? "" : devolucion.getInstitucionOrdenante()).append("|");
         cadenaOriginal.append(devolucion.getInstancia() == null ? "" : devolucion.getInstancia()).append("|");
         cadenaOriginal.append(devolucion.getInstitucionBeneficiaria() == null ? "" : devolucion.getInstitucionBeneficiaria()).append("|");

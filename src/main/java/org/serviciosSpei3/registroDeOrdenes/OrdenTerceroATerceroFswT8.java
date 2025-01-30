@@ -12,7 +12,7 @@ public class OrdenTerceroATerceroFswT8 extends ServicioBaseGenerarOrden{
 
     @Override
     protected String generarPeticion(DatosOrdenes datos) {
-        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
+        datosOrdenes.setClaveRastreo("PagoT8SPEI3QA" + (System.currentTimeMillis() % 100000));
         StringBuilder peticion = new StringBuilder();
         peticion.append("{")
                 .append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n")

@@ -10,7 +10,6 @@ public class SearchOrdenesEnviadasPendientes extends BaseServicioConsulta {
     private static final String servicio = "/api/v2/ordenes/envios/search-pendientes";
     private String propositoConsulta;
     public SearchOrdenesEnviadasPendientes(String propositoConsulta) {
-        super(propositoConsulta);
         this.propositoConsulta=propositoConsulta;
     }
 
@@ -32,11 +31,6 @@ public class SearchOrdenesEnviadasPendientes extends BaseServicioConsulta {
         url.add("capturaInicio=" + inicio);
         url.add("capturaFin=" + fin);
         return url.toString();
-    }
-
-    @Override
-    protected String getTipoConsulta() {
-        return "search";
     }
 
     protected void guardarOrdenesEnvPendientes(String respuesta) {

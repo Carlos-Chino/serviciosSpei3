@@ -12,7 +12,7 @@ public class CobroPresencialUnaOcasionT19 extends ServicioBaseGenerarOrden {
 
     @Override
     protected String generarPeticion(DatosOrdenes datosOrdenes) {
-        datosOrdenes.setClaveRastreo("QASPEI3Cert" + System.currentTimeMillis());
+        datosOrdenes.setClaveRastreo("PagoT19SPEI3QA" + (System.currentTimeMillis() % 100000));
         StringBuilder peticion = new StringBuilder();
         peticion.append("{")
                 .append("\"fechaOperacion\":\"").append(valueNull(datosOrdenes.getFechaOperacion())).append("\",\n")
